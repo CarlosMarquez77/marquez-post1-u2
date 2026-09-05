@@ -20,5 +20,29 @@ public class Main {
 
         System.out.println("=== Exportacion HTML ===");
         System.out.println(exportService.export("html", records, "UDES"));
+
+        System.out.println("=== Exportacion con configuracion por defecto ===");
+        ExportConfig defaultConfig = new ExportConfig.Builder("pdf").build();
+        System.out.println(exportService.export(defaultConfig, records, "UDES"));
+
+        System.out.println("=== Exportacion con configuracion personalizada ===");
+        ExportConfig customConfig = new ExportConfig.Builder("excel")
+            .pageSize("LETTER")
+            .orientation("LANDSCAPE")
+            .locale("en-US")
+            .watermarkText("BORRADOR")
+            .maxRowsPerPage(25)
+            .build();
+        System.out.println(exportService.export(customConfig, records, "UDES"));
+
+        System.out.println("=== Validacion de estado inconsistente ===");
+        try {
+            new ExportConfig.Builder("html").compress(true).build();
+        } catch (IllegalStateException e) {
+            System.out.println("Rechazado correctamente: " + e.getMessage());
+        }
+
     }
+
+    
 }
